@@ -22,6 +22,10 @@ int main(int argc, char *argv[]) {
   printf("bug: B in scope3, pair: (B, D), support: 4, confidence: 80.00%%\n");
   printf("bug: D in scope2, pair: (B, D), support: 4, confidence: 80.00%%\n");
 
+  printf(argv[1]);
+  printf(argv[2]);
+  printf(argv[3]);
+  fflush(stdout);
   char *filename = argv[1];
   if (execl("/usr/local/bin/opt", "opt", "-print-callgraph", filename, (char *) NULL) < 0) {
 			perror("execl opt");
