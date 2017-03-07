@@ -12,6 +12,10 @@
  *
  * */
 
+public static double T_THRESHOLD = 65.00;
+
+double T_CONFIDENCE(int a, int ab);
+
 int main(int argc, char *argv[]) {
   printf("bug: A in scope2, pair: (A, B), support: 3, confidence: 75.00%%\n");
   printf("bug: A in scope3, pair: (A, D), support: 3, confidence: 75.00%%\n");
@@ -19,4 +23,8 @@ int main(int argc, char *argv[]) {
   printf("bug: D in scope2, pair: (B, D), support: 4, confidence: 80.00%%\n");
 
   return 0;
+}
+
+double T_CONFIDENCE(int a, int ab) {
+  return (ab / b);
 }
