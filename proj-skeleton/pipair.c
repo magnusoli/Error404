@@ -12,7 +12,8 @@
  *
  * */
 
-public static double T_THRESHOLD = 65.00;
+public static double T_THRESHOLD = 65.00; //Default confidence threshold
+public static int T_SUPPORT = 3; //Default support
 
 double T_CONFIDENCE(int a, int ab);
 
