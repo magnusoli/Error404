@@ -25,6 +25,9 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
+/*
+* Helper function to calculate confidence level 
+*/
 double T_CONFIDENCE(int a, int ab) {
   return (ab / b);
 }
