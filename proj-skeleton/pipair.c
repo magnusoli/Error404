@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 /* Demo for Lab 3
  *
@@ -13,20 +14,30 @@
  *
  * */
 
-static double T_THRESHOLD = 65.00; //Default confidence threshold
-static int T_SUPPORT = 3; //Default support
-
-double T_CONFIDENCE(int a, int ab);
-
-int main(int argc, char *argv[]) {
   //printf("bug: A in scope2, pair: (A, B), support: 3, confidence: 75.00%%\n");
   //printf("bug: A in scope3, pair: (A, D), support: 3, confidence: 75.00%%\n");
   //printf("bug: B in scope3, pair: (B, D), support: 4, confidence: 80.00%%\n");
   //printf("bug: D in scope2, pair: (B, D), support: 4, confidence: 80.00%%\n");
 
-  printf("%s\n", argv[1]);
-  printf("%s\n", argv[2]);
-  printf("%s\n", argv[3]);
+static double T_THRESHOLD;
+static int T_SUPPORT;
+static double D_THRESHOLD = 65.00;  //Default confidence threshold
+static int D_SUPPORT = 3; //Default support
+
+double T_CONFIDENCE(int a, int ab);
+
+int main(int argc, char *argv[]) {
+
+  if(argc == 4) {
+    T_THRESHOLD = atof(argv[2]);
+    T_SUPPORT = atoi(argv[3]);
+  } else {
+    T_THRESHOLD = D_THRESHOLD;
+    T_SUPPORT = D_SUPPORT;
+  }
+  printf("Filename: %s\n", argv[1]);
+  printf("Threshold: %f\n", T_THRESHOLD);
+  printf("Support: %d\n", T_SUPPORT);
   fflush(stdout);
   char *filename = argv[1];
   /*
