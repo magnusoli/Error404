@@ -12,11 +12,33 @@
  *
  * */
 
+public static double T_THRESHOLD = 65.00; //Default confidence threshold
+public static int T_SUPPORT = 3; //Default support
+
+double T_CONFIDENCE(int a, int ab);
+
 int main(int argc, char *argv[]) {
   //printf("bug: A in scope2, pair: (A, B), support: 3, confidence: 75.00%%\n");
   //printf("bug: A in scope3, pair: (A, D), support: 3, confidence: 75.00%%\n");
   //printf("bug: B in scope3, pair: (B, D), support: 4, confidence: 80.00%%\n");
   //printf("bug: D in scope2, pair: (B, D), support: 4, confidence: 80.00%%\n");
 
-  return 1;
+  printf(argv[1]);
+  printf(argv[2]);
+  printf(argv[3]);
+  fflush(stdout);
+  char *filename = argv[1];
+  if (execl("/usr/local/bin/opt", "opt", "-print-callgraph", filename, (char *) NULL) < 0) {
+			perror("execl opt");
+			return 1;
+	}
+  
+  return 0;
+}
+
+/*
+* Helper function to calculate confidence level 
+*/
+double T_CONFIDENCE(int a, int ab) {
+  return (ab / b);
 }
