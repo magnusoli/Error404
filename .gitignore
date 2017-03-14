@@ -1,0 +1,10 @@
+# 
+*.sh
+*.bc
+test1/
+test2/
+test3/
+*.mak
+clean
+pipair
+*.common
