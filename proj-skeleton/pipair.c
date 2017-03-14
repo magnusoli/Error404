@@ -26,6 +26,12 @@ static int D_SUPPORT = 3; //Default support
 
 double T_CONFIDENCE(int a, int ab);
 
+enum 
+{
+  PIPE_READ = 0,
+  PIPE_WRITE,
+};
+
 int main(int argc, char *argv[]) {
 
   if(argc == 4) {
@@ -39,15 +45,64 @@ int main(int argc, char *argv[]) {
   printf("Threshold: %f\n", T_THRESHOLD);
   printf("Support: %d\n", T_SUPPORT);
   fflush(stdout);
-  char *filename = argv[1];
-  /*
-  *TODO - parse the output from execl
-  */
-  if (execl("/usr/bin/opt", "opt", "-print-callgraph", filename, (char *) NULL) < 0) {
-			perror("execl opt");
-			return 1;
-	}
   
+  /*pipe to connect opt's stderr and our stdin*/
+  int pipe_callgraph[2];
+  
+  /*pid of opt*/
+  int opt_pid;
+  
+  /*arguments*/
+  char *filename = argv[1];
+  
+  /*create pipe and check if pipe succeeded */
+  if (pipe(pipe_callgraph) < 0) {
+	  perror("pipe error");
+	  return 1;
+  }
+  
+  /*create child process */
+  opt_pid = fork();
+  if(!opt_pid) { /*child process, to spawn opt*/
+	  /*close the read end, since opt only write*/
+	  close(pipe_callgraph[PIPE_READ]);
+	  
+	  /*bind pipe to stderr, and check*/
+	  if (dup2(pipe_callgraph[PIPE_WRITE], STDERR_FILENO) < 0) {
+		  perror("dup2 pipe_callgraph");
+		  return 1;
+	  }
+	  
+	  /*print something to stderr*/
+	  fprintf(stderr, "This is child, just before spawning opt with %s.\n", filename);
+	  
+	  /*spawn opt*/
+	  /*TODO - parse the output from execl*/
+	  if (execl("/usr/bin/opt", "opt", "-print-callgraph", filename, (char *) NULL) < 0) {
+		  perror("execl opt");
+		  return 1;
+	  }
+	  /*unreachable*/
+	  return 0; 
+  }
+  /*parent process*/
+  
+  /* close the write end, since we only read */
+  close(pipe_callgraph[PIPE_WRITE]);
+
+  /* since we don't need stdin, we simply replace stdin with the pipe */
+  if (dup2(pipe_callgraph[PIPE_READ], STDIN_FILENO) < 0) {
+    perror("dup2 pipe_callgraph");
+    return 1;
+  }
+
+  /* we print w/e read from the pipe */
+  char c = '\0';
+  while (scanf("%c", &c) >= 1) {
+    printf("%c", c);
+  }
+
+  /* "That's all folks." */
   return 0;
 }
 
