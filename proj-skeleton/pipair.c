@@ -35,9 +35,12 @@ enum
 int main(int argc, char *argv[]) {
 
   if(argc == 4) {
-    T_THRESHOLD = atof(argv[2]);
     T_SUPPORT = atoi(argv[3]);
-  } else {
+  }
+  if(argc == 3) {
+     T_THRESHOLD = atof(argv[2]);
+  }
+  else {
     T_THRESHOLD = D_THRESHOLD;
     T_SUPPORT = D_SUPPORT;
   }
