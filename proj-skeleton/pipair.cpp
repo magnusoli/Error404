@@ -4,6 +4,7 @@
 #include <string.h>
 #include <iostream>
 #include <list>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -112,17 +113,47 @@ int main(int argc, char *argv[]) {
   string s;
   list<string> stringList;
   
-    while (getline(cin, s)) {
-	/*If empty line*/
-	if(s.length() <= 1) {
-		/*No node 	found*/
-		nodeFound = false;
-	}
-	else if (nodeFound) {
-		cout << s << endl;
-		stringList.push_back(s);
-	}
-	nodeFound = true;
+  while (getline(cin, s)) {
+    string caller;
+    string callee;
+	  /*If empty line*/
+	  if(s.length() <= 1) {
+		  /*No node 	found*/
+		  nodeFound = false;
+	  }
+    /* Ignore null functions */
+    else if (s.compare(0, 34, "Call graph node <<null function>>") == 1)
+    {
+      cout << "Null function found" << endl;
+      caller = "";
+      callee = "";
+      nodeFound = false;
+    }
+    else if (s.compare(0, 30, "Call graph node for function:") == 1) {
+      nodeFound = true;
+      callee = "";
+      string uses = s.substr((s.find("#uses") + 6), s.length());
+      size_t pos = s.find(":");
+      s.erase(0, pos + 3);
+      pos = s.find("'");
+      s.erase(pos, s.length());
+      caller = s;
+      cout << "Function: " <<  caller << " Used: #" << uses << endl;
+    }
+    /* Ignore calls for external nodes */
+    else if (s.find("calls external node") > 0)
+    {
+
+    }
+    else if (nodeFound) {
+      size_t pos = s.find("'");
+      s.erase(0, pos + 1);
+      s.replace(s.length() - 1, 1, "");
+      callee = s;
+      cout << callee << endl;
+		  stringList.push_back(s);
+	  }
+	  
   }
 
   /* "That's all folks." */
