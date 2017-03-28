@@ -111,7 +111,6 @@ int main(int argc, char *argv[]) {
   
   bool nodeFound = true;
   string s;
-  list<string> stringList;
   
   while (getline(cin, s)) {
     string caller;
@@ -129,6 +128,7 @@ int main(int argc, char *argv[]) {
       callee = "";
       nodeFound = false;
     }
+    /* Check for call graph node */
     else if (s.compare(0, 30, "Call graph node for function:") == 1) {
       nodeFound = true;
       callee = "";
@@ -141,17 +141,17 @@ int main(int argc, char *argv[]) {
       cout << "Function: " <<  caller << " Used: #" << uses << endl;
     }
     /* Ignore calls for external nodes */
-    else if (s.find("calls external node") > 0)
+    else if (s.find("calls external node") != string::npos)
     {
-
+      /* Do nothing */
     }
+    /* Parse calls in the node */
     else if (nodeFound) {
       size_t pos = s.find("'");
       s.erase(0, pos + 1);
       s.replace(s.length() - 1, 1, "");
       callee = s;
       cout << callee << endl;
-		  stringList.push_back(s);
 	  }
 	  
   }
